@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+
+:root 
+{
+    --bg-main: #f8f9fa;
+    --bg-card: #ffffff;
+    --text: #212529;
+    --text-muted: #718096;
+    --color-food: #ff9f43;
+    --color-water: #0083f7;
+    --border: #e9ecef;
+}
+
+html, body 
+{
+    height: 100%; /* Forza a la pantalla a medir el total de la ventana */
+    margin: 0;
+    padding: 0;
+}
+
+body 
+{
+    background-color: var(--bg-main);
+    color: var(--text);
+    font-family: 'Fredoka', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Se asegura de abarcar toda la pantalla */
+    overflow-y: auto;  /* Permite el scroll normal solo si el contenido se desborda */
+}

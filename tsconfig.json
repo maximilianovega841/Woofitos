@@ -1,0 +1,14 @@
+{
+  "compilerOptions": 
+  {
+    "target": "ES6",
+    "module": "commonjs",
+    "rootDir": "./TPS",                       /* Lee los .ts de la carpeta TPS */
+    "outDir": "./JS",                        /* Guarda los .js en la carpeta JS */
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["TPS/**/*"]
+}

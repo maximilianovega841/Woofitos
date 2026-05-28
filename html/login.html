@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woofitos - Acceso</title>
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/png">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app">
+
+        <header class="header">
+            <div class="brand">
+                <a href="index.html"><img src="/img/favicon.png" alt="Logo" class="logo"></a>
+                <h1 class="title">Woofitos</h1>
+                <div class="subtitle">
+                    <span class="tag">HappyPet</span>
+                    <span class="desc">Dispensador Automático Woofito</span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <ul class="menu">
+                    <li><a href="#" class="item">Reportes</a></li>
+                    <li><a href="#" class="item">Configuración</a></li>
+                    <li>
+                        <a href="login.html" class="profile">
+                            <img src="/img/login.png" alt="Perfil" class="avatar">
+                            <span class="profile-text">Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="login-container"> 
+            
+            <div class="login-box">
+                <div class="auth-form">
+                    <h2>Iniciar Sesión</h2>
+                    <p class="login-meta">Ingresa tus datos</p>
+                    
+                    <form id="form-login">
+                        <div class="input-group">
+                            <label for="login-user">Usuario</label>
+                            <input type="text" id="login-user" placeholder="Ej. Casto Gang123" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="login-pass">Contraseña</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="login-pass" placeholder="••••••••" required>
+                                <i class="fas fa-eye btn-toggle-pass"></i>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-food btn-block">Ingresar</button>
+                    </form>
+                    
+                    <p class="auth-switch">No tienes una cuenta? <a href="#">Regístrate aquí</a></p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-container">
+                
+                <div class="footer-col">
+                    <h3 class="footer-logo-text">Woofitos</h3>
+                    <p class="footer-about"> Platito lleno una colita feliz, agua fresca con cuidado inteligente todos los días.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Aplicación</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li><a href="login.html">Iniciar Sesión</a></li>
+                        <li><a href="#">Reportes de Consumo</a></li>
+                        <li><a href="#">Configurar Dispensador</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Soporte y Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Manual de Usuario</a></li>
+                        <li><a href="#">Ayuda y Conectividad Wi-Fi</a></li>
+                        <li><a href="#">Políticas de Privacidad</a></li>
+                        <li><a href="#">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Woofitos. Todos los derechos reservados. &bull; Proyecto Aula IPN</p>
+            </div>
+        </footer>
+
+    </div>
+    <script src="../JS/auth.js"></script>   
+</body>
+</html>

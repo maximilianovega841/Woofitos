@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Woofitos</title>
+<link rel="shortcut icon" href="/img/favicon.png" type="image/png">    
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="app">
+
+        <header class="header">
+            <div class="brand">
+                <a href="index.html"><img src="/img/favicon.png" alt="img/png" class="logo"></a>
+                <h1 class="title">Woofitos</h1>
+                <div class="subtitle">
+                    <span class="tag">HappyPet</span>
+                    <span class="desc">Dispensador Automático Woofito</span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <ul class="menu">
+                    <li><a href="#" class="item">Reportes</a></li>
+                    <li><a href="#" class="item">Configuración</a></li>
+                    <li>
+                        <a href="login.html" class="profile">
+                            <img src="/img/login.png" alt="Perfil" class="avatar">
+                            <span class="profile-text">Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="grid">
+
+            <section class="card stats">
+                <h2>Información Diaria</h2>
+                <div class="widgets">
+                    <div class="widget">Nivel de Comida: <strong id="nivel-comida">0%</strong></div>
+                    <div class="widget">Nivel de Agua: <strong id="nivel-agua">0%</strong></div>
+                </div>
+            </section>
+
+            <section class="card chart-food">
+                <div class="card-top">
+                    <h2>Gráfica del Plato de Comida</h2>
+                    <button class="btn-food">Llenar Plato</button>
+                </div>
+                <p class="meta">Cantidad Dispensada (gr) vs Hora</p>
+                <div class="chart">Aquí va la gráfica de barras</div>
+            </section>
+
+            <section class="card tank-food">
+                <h2>Contenedor de Comida</h2>
+                <p class="meta">Capacidad Restante vs Días</p>
+                <div class="chart">Aquí va la gráfica de líneas o no se cuál queda mejor</div>
+            </section>
+
+            <section class="card history">
+                <h2>Historial del Día</h2>
+                <ul class="list">
+                    <li>🐾 Comida Dispensada - 8:02 AM</li>
+                    <li>💧 Agua Dispensada - 7:55 AM</li>
+                </ul>
+            </section>
+
+            <section class="card chart-water">
+                <div class="card-top">
+                    <h2>Gráfica del Plato de Agua</h2>
+                    <button class="btn-water">Rellenar Agua</button>
+                </div>
+                <p class="meta">Consumo de Agua (ml) vs Hora</p>
+                <div class="chart">Aquí va la gráfica de barras</div>
+            </section>
+
+            <section class="card tank-water">
+                <h2>Contenedor de Agua</h2>
+                <p class="meta">Capacidad Restante vs Días</p>
+                <div class="chart">Aquí va la gráfica de linea o tampoco sé cuál quede mejor</div>
+            </section>
+
+        </main>
+
+        <footer class="footer">
+            <div class="footer-container">
+                
+                <div class="footer-col">
+                    <h3 class="footer-logo-text">Woofitos</h3>
+                    <p class="footer-about"> Platito lleno una colita feliz, agua fresca con cuidado inteligente todos los días.</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Aplicación</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Dashboard</a></li>
+                        <li><a href="login.html">Iniciar Sesión</a></li>
+                        <li><a href="#">Reportes de Consumo</a></li>
+                        <li><a href="#">Configurar Dispensador</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Soporte y Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Manual de Usuario</a></li>
+                        <li><a href="#">Ayuda y Conectividad Wi-Fi</a></li>
+                        <li><a href="#">Políticas de Privacidad</a></li>
+                        <li><a href="#">Términos y Condiciones</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Woofitos. Todos los derechos reservados. &bull; Proyecto Aula IPN</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script src="/JS/dashboard.js"></script>
+</body>
+</html>

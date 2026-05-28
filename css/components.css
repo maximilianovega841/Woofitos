@@ -1,0 +1,170 @@
+/* ==========================================================================
+   COMPONENTS (Elementos interactivos y reutilizables)
+   botones, cards, grids, widgets.
+   ========================================================================== */
+
+/* --- Dashboard Grid--- */
+.grid 
+{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    padding: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    flex: 1; /* 🌟 Rellena el espacio para empujar al footer */
+}
+
+/* --- Cards --- */
+.card 
+{
+    background-color: var(--bg-card);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02), 
+                0 2px 10px rgba(0, 0, 0, 0.01);               
+    border: 1px solid rgba(0, 0, 0, 0.01);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover 
+{
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.05);
+}
+
+/* Títulos principales dentro de las tarjetas */
+.card h2 
+{
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    color: var(--text);
+}
+/* Parte superior interna de la tarjeta */
+.card-top 
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+/* Subtítulos o texto aclaratorio de las gráficas */
+.meta 
+{
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0 0 16px 0;
+}
+
+/* --- Buttons--- */
+.btn  
+{
+    border: none;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-food 
+{
+    border: none;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    background-color: var(--color-food);
+}
+.btn-food:hover 
+{
+    background-color: #e68a2e;
+}
+
+.btn-water
+{
+    border: none;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    background-color: var(--color-water);
+}
+.btn-water:hover 
+{
+    background-color: #0069c7;
+}
+
+/* --- Widgets --- */
+.widgets 
+{
+    display: flex;
+    gap: 15px;
+}
+
+.widget 
+{
+    background-color: var(--bg-main);
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    flex: 1;
+    text-align: center;
+}
+
+.widget strong 
+{
+    color: var(--text);
+}
+
+/* --- LISTAS --- */
+.list 
+{
+    margin: 0;
+    padding: 0 0 0 20px;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.list li 
+{
+    margin-bottom: 8px;
+    list-style-type: none;
+}
+
+/* --- Charts --- */
+.chart 
+{
+    background-color: #f8fafc;
+    border: 2px dashed #e2e8f0;
+    border-radius: 14px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 13px;
+    box-sizing: border-box;
+}

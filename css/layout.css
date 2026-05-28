@@ -1,0 +1,269 @@
+/* ==========================================================================
+                                    LAYOUT
+   ========================================================================== */
+.app 
+{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* forza a ocupar el 100% de la ventana */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header 
+{
+    background-color: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 30px;
+    height: 70px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* --- SECCIÓN IZQUIERDA: BRAND --- */
+.brand 
+{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo 
+{
+    height: 50px; 
+    width: auto;
+    display: block;
+    transition: transform 0.3s ease;
+    will-change: transform;
+}
+
+.logo:hover 
+{
+    transform: scale(1.08);
+}
+
+.title 
+{
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--color-food);
+    margin: 0;
+    line-height: 1;
+}
+
+.subtitle 
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 2px solid var(--border);
+    padding-left: 15px;
+    height: 45px;
+}
+
+.tag 
+{
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+}
+
+.desc 
+{
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.2;
+}
+
+/* --- SECCIÓN DERECHA: NAVEGACIÓN --- */
+.nav 
+{
+    margin-left: auto;
+}
+
+.menu 
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.item 
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 12px;
+    height: 36px;
+    box-sizing: border-box;
+    transition: all 0.2s ease-in-out;
+}
+
+.item:hover 
+{
+    color: var(--text);
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* --- SECCIÓN DE PERFIL / LOGIN --- */
+.profile 
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    gap: 2px;
+    padding: 0 8px;
+    height: 50px; /* Reducido de 90px a 50px para que quepa perfecto en los 70px del header */
+    transition: transform 0.2s ease;
+}
+
+.profile:hover 
+{
+    transform: scale(1.05);
+}
+
+.avatar 
+{
+    height: 32px;
+    width: 32px;
+    object-fit: cover;
+    display: block;
+}
+
+.profile-text 
+{
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1;
+}
+
+.profile:hover .profile-text 
+{
+    color: var(--text);
+}
+
+/* ==========================================================================
+   EL FOOTER
+   ========================================================================== */
+
+.footer 
+{
+    margin-top: auto; /* Mantiene al footer pegado al fondo */
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 40px 30px 20px 30px; /* Más padding arriba para las columnas */
+    width: 100%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Contenedor que alinea las 3 columnas usando Grid */
+.footer-container 
+{
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+.footer-col h3.footer-logo-text 
+{
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-food);
+    margin: 0 0 12px 0;
+}
+
+.footer-about 
+{
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 320px;
+}
+
+.footer-col h4 
+{
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 0 15px 0;
+    text-transform: uppercase; /* Hace que resalten los títulos pequeños */
+    letter-spacing: 0.5px;
+}
+
+/* Listas de enlaces del footer */
+.footer-links 
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-links li 
+{
+    margin-bottom: 10px;
+}
+
+.footer-links a 
+{
+    font-size: 14px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover 
+{
+    color: var(--color-water);
+    text-decoration: underline;
+}
+
+/* --- BARRA INFERIOR DE COPYRIGHT --- */
+.footer-bottom 
+{
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.footer-bottom p 
+{
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+}
+
+/* RESPONSIVE*/
+@media (max-width: 768px) 
+{
+    .footer-container 
+    {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        text-align: center;
+    }
+    .footer-about 
+    {
+        margin: 0 auto;
+    }
+}
