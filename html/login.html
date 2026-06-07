@@ -38,7 +38,7 @@
         <main class="login-container"> 
             
             <div class="login-box">
-                <div class="auth-form">
+                <div id="section-login" class="auth-form">
                     <h2>Iniciar Sesión</h2>
                     <p class="login-meta">Ingresa tus datos</p>
                     
@@ -59,7 +59,39 @@
                         <button type="submit" class="btn btn-food btn-block">Ingresar</button>
                     </form>
                     
-                    <p class="auth-switch">No tienes una cuenta? <a href="#">Regístrate aquí</a></p>
+                    <p class="auth-switch">No tienes una cuenta? <a href="#" id="link-to-register">Regístrate aquí</a></p>
+                </div>
+
+                <div id="section-register" class="auth-form hidden-section">
+                    <h2>Crear Cuenta</h2>
+                    <p class="login-meta">Regístrate para gestionar el dispensador</p>
+                    
+                    <form id="form-register">
+                        <div class="input-group">
+                            <label for="reg-user">Usuario</label>
+                            <input type="text" id="reg-user" placeholder="Crea tu usuario" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="reg-pass">Contraseña</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="reg-pass" placeholder="••••••••" required>
+                                <i class="fas fa-eye btn-toggle-pass"></i>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="reg-pass-confirm">Confirmar Contraseña</label>
+                            <div class="password-wrapper">
+                                <input type="password" id="reg-pass-confirm" placeholder="••••••••" required>
+                                <i class="fas fa-eye btn-toggle-pass"></i>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-food btn-block">Registrarse</button>
+                    </form>
+                    
+                    <p class="auth-switch">¿Ya tienes cuenta? <a href="#" id="link-to-login">Inicia sesión aquí</a></p>
                 </div>
             </div>
         </main>

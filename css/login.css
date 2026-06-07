@@ -24,6 +24,34 @@
     box-sizing: border-box;
 }
 
+/* --- ANIMACIÓN E INTERCAMBIO DE SECCIONES (SPA) --- */
+
+.auth-form 
+{
+    animation: fadeInForm 0.4s ease-in-out;
+}
+
+.hidden-section 
+{
+    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@keyframes fadeInForm 
+{
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- TEXTOS --- */
+
 .login-box h2 
 {
     font-size: 24px;
@@ -75,7 +103,7 @@
     border-color: var(--color-food);
 }
 
-/* --- OJITO PARA VER LA CONTRASEÑA--- */
+/* --- OJITO PARA VER LA CONTRASEÑA --- */
 .password-wrapper 
 {
     position: relative;
@@ -96,7 +124,7 @@
     font-size: 16px;
     user-select: none;
     color: var(--text-muted);
-    cursor: default;
+    cursor: pointer; /* Cambiado a pointer para que se note que es un botón clickable */
     transition: color 0.2s ease;
 }
 
