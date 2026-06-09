@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 document.addEventListener('DOMContentLoaded', () => {
     // La dirección de nuestro servidor Node.js corriendo en XAMPP
-    const URL_API = 'http://localhost:3000/api';
+    const URL_API = 'mysql-production-c0e4.up.railway.app/api';
     // ==========================================
     // 1. INTERCAMBIO VISUAL DE PESTAÑAS (SPA)
     // ==========================================

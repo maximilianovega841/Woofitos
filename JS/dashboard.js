@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const URL_API = 'http://localhost:3000/api';
+    const URL_API = 'mysql-production-c0e4.up.railway.app/api';
 
     // ==========================================
     // 1. ANIMACIÓN DE LOS CONTADORES DIARIOS
