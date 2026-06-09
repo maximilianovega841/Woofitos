@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Woofitos</title>
-<link rel="shortcut icon" href="/img/favicon.png" type="image/png">    
-<link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/img/favicon.png" type="image/png">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
     <div class="app">
@@ -19,23 +19,18 @@
                     <span class="desc">Dispensador Automático Woofito</span>
                 </div>
             </div>
-
             <nav class="nav">
                 <ul class="menu">
                     <li><a href="#" class="item">Reportes</a></li>
                     <li><a href="#" class="item">Configuración</a></li>
-                    <li>
-                        <a href="login.html" class="profile">
-                            <img src="/img/login.png" alt="Perfil" class="avatar">
-                            <span class="profile-text">Login</span>
-                        </a>
-                    </li>
+                    <li id="nav-auth-item"></li>
                 </ul>
             </nav>
         </header>
 
         <main class="grid">
 
+            <!-- CARD 1: Información Diaria -->
             <section class="card stats">
                 <h2>Información Diaria</h2>
                 <div class="widgets">
@@ -44,21 +39,45 @@
                 </div>
             </section>
 
+            <!-- CARD 2: Plato de Comida -->
             <section class="card chart-food">
                 <div class="card-top">
-                    <h2>Gráfica del Plato de Comida</h2>
-                    <button class="btn-food">Llenar Plato</button>
+                    <h2>Plato de Comida</h2>
+                    <div class="card-controls">
+                        <select class="chart-view-selector" data-chart="platoComida">
+                            <option value="horas">Horas</option>
+                            <option value="dias">Días</option>
+                            <option value="meses">Meses</option>
+                        </select>
+                        <button class="btn-food">Llenar Plato</button>
+                    </div>
                 </div>
-                <p class="meta">Cantidad Dispensada (gr) vs Hora</p>
-                <div class="chart">Aquí va la gráfica de barras</div>
+                <p class="meta">Cantidad Dispensada (g) vs Tiempo</p>
+                <div class="chart-wrapper">
+                    <canvas id="chart-plato-comida"></canvas>
+                </div>
             </section>
 
+            <!-- CARD 3: Contenedor de Comida -->
             <section class="card tank-food">
-                <h2>Contenedor de Comida</h2>
-                <p class="meta">Capacidad Restante vs Días</p>
-                <div class="chart">Aquí va la gráfica de líneas o no se cuál queda mejor</div>
+                <div class="card-top">
+                    <h2>Contenedor de Comida</h2>
+                    <div class="card-controls">
+                        <select class="chart-view-selector" data-chart="contenedorComida">
+                            <option value="horas">Horas</option>
+                            <option value="dias">Días</option>
+                            <option value="meses">Meses</option>
+                        </select>
+                        <button class="btn btn-toggle btn-food-outline" id="btn-toggle-kg">Ver en kg</button>
+                    </div>
+                </div>
+                <p class="meta">Capacidad Restante vs Tiempo</p>
+                <div class="chart-wrapper">
+                    <canvas id="chart-contenedor-comida"></canvas>
+                </div>
             </section>
 
+            <!-- CARD 4: Historial del Día -->
             <section class="card history">
                 <h2>Historial del Día</h2>
                 <ul class="list">
@@ -67,31 +86,51 @@
                 </ul>
             </section>
 
+            <!-- CARD 5: Plato de Agua -->
             <section class="card chart-water">
                 <div class="card-top">
-                    <h2>Gráfica del Plato de Agua</h2>
-                    <button class="btn-water">Rellenar Agua</button>
+                    <h2>Plato de Agua</h2>
+                    <div class="card-controls">
+                        <select class="chart-view-selector" data-chart="platoAgua">
+                            <option value="horas">Horas</option>
+                            <option value="dias">Días</option>
+                            <option value="meses">Meses</option>
+                        </select>
+                        <button class="btn-water">Rellenar Agua</button>
+                    </div>
                 </div>
-                <p class="meta">Consumo de Agua (ml) vs Hora</p>
-                <div class="chart">Aquí va la gráfica de barras</div>
+                <p class="meta">Consumo de Agua (ml) vs Tiempo</p>
+                <div class="chart-wrapper">
+                    <canvas id="chart-plato-agua"></canvas>
+                </div>
             </section>
 
+            <!-- CARD 6: Contenedor de Agua -->
             <section class="card tank-water">
-                <h2>Contenedor de Agua</h2>
-                <p class="meta">Capacidad Restante vs Días</p>
-                <div class="chart">Aquí va la gráfica de linea o tampoco sé cuál quede mejor</div>
+                <div class="card-top">
+                    <h2>Contenedor de Agua</h2>
+                    <div class="card-controls">
+                        <select class="chart-view-selector" data-chart="contenedorAgua">
+                            <option value="horas">Horas</option>
+                            <option value="dias">Días</option>
+                            <option value="meses">Meses</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="meta">Capacidad Restante (%) vs Tiempo</p>
+                <div class="chart-wrapper">
+                    <canvas id="chart-contenedor-agua"></canvas>
+                </div>
             </section>
 
         </main>
 
         <footer class="footer">
             <div class="footer-container">
-                
                 <div class="footer-col">
                     <h3 class="footer-logo-text">Woofitos</h3>
-                    <p class="footer-about"> Platito lleno una colita feliz, agua fresca con cuidado inteligente todos los días.</p>
+                    <p class="footer-about">Platito lleno una colita feliz, agua fresca con cuidado inteligente todos los días.</p>
                 </div>
-
                 <div class="footer-col">
                     <h4>Aplicación</h4>
                     <ul class="footer-links">
@@ -101,7 +140,6 @@
                         <li><a href="#">Configurar Dispensador</a></li>
                     </ul>
                 </div>
-
                 <div class="footer-col">
                     <h4>Soporte y Legal</h4>
                     <ul class="footer-links">
@@ -111,9 +149,7 @@
                         <li><a href="#">Términos y Condiciones</a></li>
                     </ul>
                 </div>
-
             </div>
-
             <div class="footer-bottom">
                 <p>&copy; 2026 Woofitos. Todos los derechos reservados. &bull; Proyecto Aula IPN</p>
             </div>
@@ -121,6 +157,37 @@
 
     </div>
 
+    <!-- Modal de edición de perfil -->
+    <div id="modal-perfil" class="modal-overlay hidden-section">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Editar Perfil</h2>
+                <button id="btn-cerrar-modal" class="modal-close">&times;</button>
+            </div>
+            <form id="form-perfil">
+                <div class="input-group">
+                    <label for="perfil-username">Nombre de usuario</label>
+                    <input type="text" id="perfil-username" placeholder="Tu nombre de usuario">
+                </div>
+                <div class="input-group">
+                    <label for="perfil-email">Correo electrónico</label>
+                    <input type="email" id="perfil-email" placeholder="tu@correo.com">
+                </div>
+                <div class="input-group">
+                    <label for="perfil-nombre">Nombre completo</label>
+                    <input type="text" id="perfil-nombre" placeholder="Tu nombre completo">
+                </div>
+                <div class="input-group">
+                    <label for="perfil-pass">Nueva contraseña <span style="font-weight:400;color:var(--text-muted)">(dejar vacío para no cambiar)</span></label>
+                    <input type="password" id="perfil-pass" placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn btn-food btn-block">Guardar cambios</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chart.js desde CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <script src="/JS/dashboard.js"></script>
 </body>
 </html>
