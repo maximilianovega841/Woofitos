@@ -8,6 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const usuarioId     = sessionStorage.getItem('usuario_id');
     const usuarioNombre = sessionStorage.getItem('usuario_nombre');
 
+    // ── Protección de ruta: si no hay sesión, mandar al login ──
+    if (!usuarioId) {
+        window.location.href = 'login.html';
+        return;
+    }
+
     // Mostrar nombre en sección cuenta
     const cuentaUsername = document.getElementById('cuenta-username');
     if (cuentaUsername) cuentaUsername.textContent = usuarioNombre || '—';
