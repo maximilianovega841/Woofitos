@@ -1,7 +1,8 @@
-/*Style para el html*/
 @import url('variables.css');
 @import url('layout.css');
 @import url('components.css');
 @import url('login.css');
 @import url('profile.css');
 @import url('charts.css');
+@import url('config.css');
+@import url('responsive.css');

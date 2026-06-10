@@ -1,0 +1,286 @@
+/* ==========================================================================
+   CONFIG.CSS — Página de configuración de dispositivos
+   ========================================================================== */
+
+.config-main {
+    flex: 1;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 30px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+}
+
+/* ── Sección ── */
+.config-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.config-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.config-section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.config-section-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 4px 0 0 0;
+}
+
+.config-add-btn {
+    padding: 10px 18px;
+    font-size: 14px;
+    gap: 6px;
+    display: flex;
+    align-items: center;
+}
+
+/* ── Grid de dispositivos ── */
+.devices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+/* ── Card de dispositivo ── */
+.device-card {
+    background-color: var(--bg-card);
+    border-radius: 18px;
+    padding: 22px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.device-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+.device-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.device-icon {
+    font-size: 28px;
+    line-height: 1;
+}
+
+.device-info { flex: 1; }
+
+.device-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+}
+
+.device-id {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 2px 0 0 0;
+    font-family: monospace;
+}
+
+.device-date {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.device-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-device-edit {
+    flex: 1;
+    background-color: var(--bg-main);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-device-edit:hover { background-color: #edf2f7; }
+
+.btn-device-delete {
+    background-color: #fff5f5;
+    border: 1px solid #fed7d7;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e53e3e;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-device-delete:hover { background-color: #fed7d7; }
+
+/* ── Estado vacío ── */
+.devices-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--bg-card);
+    border-radius: 18px;
+    border: 2px dashed var(--border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.devices-empty-icon { font-size: 48px; }
+
+.devices-empty p {
+    font-size: 15px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ── Card de configuración de cuenta ── */
+.config-card {
+    background-color: var(--bg-card);
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.config-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--border);
+}
+
+.config-row:last-child { border-bottom: none; }
+
+.config-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.config-value {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* ── Botón peligroso (cerrar sesión / eliminar) ── */
+.btn-danger-outline {
+    background: none;
+    border: 1.5px solid #e53e3e;
+    color: #e53e3e;
+    border-radius: 10px;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-danger-outline:hover {
+    background-color: #e53e3e;
+    color: white;
+}
+
+/* ── Pasos de emparejamiento ── */
+.pair-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.pair-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: var(--bg-main);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.pair-step-num {
+    min-width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: var(--color-food);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pair-step p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Mensaje de resultado ── */
+.pair-msg {
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 14px;
+    border-radius: 10px;
+    margin: 0 0 12px 0;
+}
+
+.pair-msg.msg--ok {
+    background-color: #f0fff4;
+    color: #276749;
+    border: 1px solid #9ae6b4;
+}
+
+.pair-msg.msg--error {
+    background-color: #fff5f5;
+    color: #c53030;
+    border: 1px solid #fed7d7;
+}
+
+/* ── Nav item activo ── */
+.item--active {
+    color: var(--color-food) !important;
+    background-color: rgba(255, 159, 67, 0.08);
+}
+
+/* ── Responsive config ── */
+@media (max-width: 480px) {
+    .config-main { padding: 20px 16px; }
+    .devices-grid { grid-template-columns: 1fr; }
+    .config-section-header { flex-direction: column; align-items: flex-start; }
+}

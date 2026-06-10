@@ -1,0 +1,160 @@
+/* ==========================================================================
+   RESPONSIVE — Mobile first
+   Breakpoints: 768px (tablet), 480px (móvil)
+   ========================================================================== */
+
+/* ── TABLET (≤ 768px) ── */
+@media (max-width: 768px) {
+
+    /* Grid: 3 col → 2 col */
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 20px;
+        gap: 16px;
+    }
+
+    /* Header: reducir padding */
+    .header {
+        padding: 12px 20px;
+        height: auto;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .title { font-size: 24px; }
+    .tag   { font-size: 15px; }
+    .desc  { font-size: 12px; }
+
+    /* Menú: ocultar texto de nav items, solo iconos */
+    .menu { gap: 4px; }
+    .item { font-size: 14px; padding: 6px 10px; }
+}
+
+/* ── MÓVIL (≤ 480px) ── */
+@media (max-width: 480px) {
+
+    /* Grid: 1 sola columna */
+    .grid {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 14px;
+    }
+
+    /* Header hamburguesa */
+    .header {
+        position: relative;
+        padding: 12px 16px;
+        height: auto;
+    }
+
+    /* Ocultar nav normal */
+    .nav {
+        display: none;
+        width: 100%;
+        order: 3;
+        background-color: var(--bg-card);
+        border-top: 1px solid var(--border);
+        padding: 10px 0;
+        margin: 0 -16px;
+        padding-left: 16px;
+    }
+
+    /* Nav visible cuando está activo */
+    .nav.nav--open {
+        display: block;
+    }
+
+    .nav.nav--open .menu {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .nav.nav--open .item {
+        width: 100%;
+        font-size: 16px;
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+
+    /* Botón hamburguesa */
+    .btn-hamburger {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        margin-left: auto;
+        border-radius: 8px;
+        transition: background-color 0.2s;
+    }
+
+    .btn-hamburger:hover {
+        background-color: var(--bg-main);
+    }
+
+    .btn-hamburger span {
+        display: block;
+        width: 22px;
+        height: 2px;
+        background-color: var(--text);
+        border-radius: 2px;
+        transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    /* Animación X al abrir */
+    .btn-hamburger.is-open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    .btn-hamburger.is-open span:nth-child(2) {
+        opacity: 0;
+    }
+    .btn-hamburger.is-open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Ocultar subtítulo en móvil muy pequeño */
+    .subtitle { display: none; }
+
+    /* Cards: padding más pequeño */
+    .card { padding: 18px; }
+
+    /* Gráficas: altura reducida pero visible */
+    .chart-wrapper { height: 160px; }
+
+    /* Card-top: apilar controles verticalmente si no caben */
+    .card-top {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    .card-controls {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    /* Widgets: apilar verticalmente */
+    .widgets { flex-direction: column; }
+
+    /* Footer: 1 columna */
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        text-align: center;
+    }
+    .footer-about { margin: 0 auto; }
+
+    /* Botón hamburguesa visible solo en móvil */
+    .btn-hamburger { display: flex; }
+
+    /* Dropdown de perfil: ajustar posición */
+    .profile-dropdown {
+        right: -10px;
+        min-width: 170px;
+    }
+}
+
+/* Ocultar hamburguesa en desktop */
+.btn-hamburger { display: none; }

@@ -350,4 +350,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setInterval(tickTiempoReal, 5000);
 
+
+    // ==========================================
+    // 7. HAMBURGUESA (MENÚ MÓVIL)
+    // ==========================================
+    const btnHamburger = document.getElementById('btn-hamburger');
+    const mainNav      = document.getElementById('main-nav');
+
+    if (btnHamburger && mainNav) {
+        btnHamburger.addEventListener('click', () => {
+            btnHamburger.classList.toggle('is-open');
+            mainNav.classList.toggle('nav--open');
+        });
+        // Cerrar al hacer clic en un enlace
+        mainNav.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('click', () => {
+                btnHamburger.classList.remove('is-open');
+                mainNav.classList.remove('nav--open');
+            });
+        });
+    }
+
 });
