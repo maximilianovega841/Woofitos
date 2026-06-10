@@ -18,6 +18,12 @@ app.use(express.json());
 
 // Sirve los archivos estáticos del proyecto (html, css, js, img)
 app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, 'html')));
+
+// Ruta raíz → redirige al dashboard
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'html', 'index.html'));
+});
 
 // ==========================================
 // 2. CONEXIÓN A LA BASE DE DATOS
@@ -156,4 +162,109 @@ app.put('/api/usuarios/actualizar', (req, res) => {
 // ==========================================
 app.listen(PORT, () => {
     console.log(`🚀 Servidor Woofitos corriendo en http://localhost:${PORT}`);
+});
+
+// ==========================================
+// 7. ENDPOINTS DE DISPOSITIVOS
+// ==========================================
+
+// GET — Listar dispositivos de un usuario
+app.get('/api/dispositivos/:usuario_id', (req, res) => {
+    const { usuario_id } = req.params;
+    const query = 'SELECT * FROM dispositivos WHERE id_usuario = ? ORDER BY fecha_vinculacion DESC';
+    db.query(query, [usuario_id], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error al obtener dispositivos.' });
+        res.json({ dispositivos: results });
+    });
+});
+
+// POST — El Arduino anuncia su código al encender
+app.post('/api/dispositivos/anunciar', (req, res) => {
+    const { arduino_id, codigo } = req.body;
+    if (!arduino_id || !codigo) return res.status(400).json({ error: 'Faltan datos del dispositivo.' });
+
+    const expira = new Date(Date.now() + 10 * 60 * 1000); // 10 minutos
+
+    // Upsert: si ya existe actualiza el código, si no lo crea sin usuario
+    const query = `
+        INSERT INTO dispositivos (id_dispositivo, codigo_emparej, codigo_expira, vinculado)
+        VALUES (?, ?, ?, 0)
+        ON DUPLICATE KEY UPDATE codigo_emparej = ?, codigo_expira = ?, vinculado = 0
+    `;
+    db.query(query, [arduino_id, codigo, expira, codigo, expira], (err) => {
+        if (err) return res.status(500).json({ error: 'Error al registrar dispositivo.' });
+        res.json({ success: true, mensaje: 'Dispositivo anunciado. Esperando vinculación.' });
+    });
+});
+
+// POST — El usuario vincula un dispositivo con su código
+app.post('/api/dispositivos/vincular', (req, res) => {
+    const { usuario_id, codigo, nombre_mascota } = req.body;
+    if (!usuario_id || !codigo) return res.status(400).json({ error: 'Faltan datos para vincular.' });
+
+    const codigoUpper = codigo.toUpperCase().trim();
+
+    // Buscar dispositivo con ese código no expirado y sin vincular
+    const buscar = `
+        SELECT * FROM dispositivos
+        WHERE codigo_emparej = ?
+        AND (codigo_expira IS NULL OR codigo_expira > NOW())
+        AND (vinculado = 0 OR vinculado IS NULL)
+        LIMIT 1
+    `;
+    db.query(buscar, [codigoUpper], (err, results) => {
+        if (err) return res.status(500).json({ error: 'Error al buscar dispositivo.' });
+        if (results.length === 0)
+            return res.status(404).json({ error: 'Código incorrecto o expirado. Reinicia tu Woofito para obtener un nuevo código.' });
+
+        const disp   = results[0];
+        const nombre = nombre_mascota || 'Mi Woofito';
+
+        const actualizar = `
+            UPDATE dispositivos
+            SET id_usuario = ?, nombre_mascota = ?, vinculado = 1,
+                fecha_vinculacion = NOW(), codigo_emparej = NULL, codigo_expira = NULL
+            WHERE id_dispositivo = ?
+        `;
+        db.query(actualizar, [usuario_id, nombre, disp.id_dispositivo], (err2) => {
+            if (err2) return res.status(500).json({ error: 'Error al vincular dispositivo.' });
+
+            // Crear registro en monitoreo_tanques si no existe
+            db.query(
+                'INSERT IGNORE INTO monitoreo_tanques (id_dispositivo) VALUES (?)',
+                [disp.id_dispositivo]
+            );
+
+            res.json({ success: true, mensaje: '¡Dispositivo vinculado!', id_dispositivo: disp.id_dispositivo });
+        });
+    });
+});
+
+// PUT — Renombrar mascota de un dispositivo
+app.put('/api/dispositivos/renombrar', (req, res) => {
+    const { id_dispositivo, nombre_mascota } = req.body;
+    if (!id_dispositivo || !nombre_mascota) return res.status(400).json({ error: 'Faltan datos.' });
+    db.query(
+        'UPDATE dispositivos SET nombre_mascota = ? WHERE id_dispositivo = ?',
+        [nombre_mascota, id_dispositivo],
+        (err) => {
+            if (err) return res.status(500).json({ error: 'Error al renombrar.' });
+            res.json({ success: true });
+        }
+    );
+});
+
+// DELETE — Desvincular dispositivo de la cuenta
+app.delete('/api/dispositivos/eliminar', (req, res) => {
+    const { id_dispositivo, usuario_id } = req.body;
+    if (!id_dispositivo || !usuario_id) return res.status(400).json({ error: 'Faltan datos.' });
+    db.query(
+        'UPDATE dispositivos SET id_usuario = NULL, vinculado = 0, fecha_vinculacion = NULL WHERE id_dispositivo = ? AND id_usuario = ?',
+        [id_dispositivo, usuario_id],
+        (err, result) => {
+            if (err) return res.status(500).json({ error: 'Error al desvincular.' });
+            if (result.affectedRows === 0) return res.status(403).json({ error: 'No tienes permiso para eliminar este dispositivo.' });
+            res.json({ success: true });
+        }
+    );
 });
