@@ -136,20 +136,21 @@ app.put('/api/usuarios/actualizar', (req, res) => {
     });
 });
 
-// --- RUTA ESPECÍFICA PARA EL ARDUINO (Pon esta ANTES de la otra) ---
 app.get('/api/dispositivos/verificar', (req, res) => {
     const arduino_id = req.query.mac;
-    if (!arduino_id) return res.send("VINCULADO:NO");
+    if (!arduino_id) return res.send("NO");
 
     const query = 'SELECT vinculado FROM dispositivos WHERE id_dispositivo = ? LIMIT 1';
     db.query(query, [arduino_id], (err, results) => {
-        if (err || results.length === 0) return res.send("VINCULADO:NO");
-        
-        // Si está vinculado, responde VINCULADO:OK
-        if (results[0].vinculado === 1) {
-            return res.send("VINCULADO:OK");
+        if (err || results.length === 0 || results[0].vinculado !== 1) {
+            return res.send("NO");
         }
-        return res.send("VINCULADO:NO");
+
+        if (ordenesDispensar[arduino_id] === true) {
+            ordenesDispensar[arduino_id] = false;
+            return res.send("GIRAR"); // Respuesta mínima: 5 letras
+        }
+        return res.send("OK"); // Respuesta mínima: 2 letras
     });
 });
 
