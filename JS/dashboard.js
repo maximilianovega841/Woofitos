@@ -5,6 +5,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const URL_API = 'https://woofitos-production.up.railway.app/api';
 
     // ==========================================
+    // 0. NUEVA LÓGICA: CARGAR DISPOSITIVOS
+    // ==========================================
+    const cargarDispositivos = async () => {
+        const usuarioId = sessionStorage.getItem('usuario_id');
+        if (!usuarioId) return;
+
+        try {
+            const resp = await fetch(`${URL_API}/dispositivos/${usuarioId}`);
+            const data = await resp.json();
+            
+            if (data.dispositivos && data.dispositivos.length > 0) {
+                console.log("✅ Dispositivos cargados:", data.dispositivos);
+            } else {
+                console.warn("⚠️ No se encontraron dispositivos vinculados a este usuario.");
+            }
+        } catch (err) {
+            console.error("❌ Error al cargar dispositivos:", err);
+        }
+    };
+    cargarDispositivos();
+
+    // ==========================================
     // 1. ANIMACIÓN DE LOS CONTADORES DIARIOS
     // ==========================================
     const animarContador = (elementoId, valorFinal) => {
@@ -39,14 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
             
             console.log("📤 Solicitando dispensación manual para WOOFITO_HARDWARE_UNOQ_01...");
 
-            // 2. Petición real al servidor en Railway usando tu constante URL_API
+            // 2. Petición real al servidor en Railway
             fetch(`${URL_API}/dispositivos/solicitar-comida`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
-                    id_dispositivo: 'WOOFITO_HARDWARE_UNOQ_01' // ID exacto de tu Arduino
+                    id_dispositivo: 'WOOFITO_HARDWARE_UNOQ_01' 
                 })
             })
             .then(response => {
@@ -133,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = 'index.html';
         });
 
-        const modalPerfil    = document.getElementById('modal-perfil');
+        const modalPerfil     = document.getElementById('modal-perfil');
         const btnEditarPerfil = document.getElementById('btn-editar-perfil');
         const btnCerrarModal = document.getElementById('btn-cerrar-modal');
         const formPerfil     = document.getElementById('form-perfil');
@@ -187,11 +209,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4. GRÁFICAS EN TIEMPO REAL
     // ==========================================
 
-    // ── Colores de la app ──
     const COLOR_FOOD  = '#ff9f43';
     const COLOR_WATER = '#0083f7';
 
-    // ── Generador de etiquetas de tiempo según vista ──
     const generarEtiquetas = (vista, cantidad) => {
         const ahora = new Date();
         const etiquetas = [];
@@ -211,14 +231,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return etiquetas;
     };
 
-    // ── Generador de datos simulados ──
     const datosAleatorios = (cantidad, min, max) =>
         Array.from({ length: cantidad }, () => +(Math.random() * (max - min) + min).toFixed(1));
 
-    // ── Cantidad de puntos por vista ──
     const puntosPorVista = { horas: 24, dias: 24, meses: 30 };
 
-    // ── Opciones base de Chart.js ──
     const opcionesBase = (labelY, color) => ({
         responsive: true,
         maintainAspectRatio: false,
@@ -248,7 +265,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // ── Crear dataset de línea ──
     const crearDataset = (datos, color, label) => ({
         label,
         data: datos,
@@ -262,7 +278,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tension: 0.4,
     });
 
-    // ── Fábrica de gráfica ──
     const crearGrafica = (canvasId, labelY, color, label, min, max) => {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return null;
@@ -281,26 +296,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return chart;
     };
 
-    // ── Instanciar las 4 gráficas ──
     const graficas = {
-        platoComida:       crearGrafica('chart-plato-comida',      'Gramos (g)',  COLOR_FOOD,  'Comida dispensada', 0,   150),
-        contenedorComida:  crearGrafica('chart-contenedor-comida', '% restante',  COLOR_FOOD,  'Nivel contenedor',  20,  100),
-        platoAgua:         crearGrafica('chart-plato-agua',        'Mililitros (ml)', COLOR_WATER, 'Agua dispensada', 0, 300),
+        platoComida:      crearGrafica('chart-plato-comida',       'Gramos (g)',  COLOR_FOOD,  'Comida dispensada', 0,   150),
+        contenedorComida: crearGrafica('chart-contenedor-comida', '% restante',  COLOR_FOOD,  'Nivel contenedor',  20,  100),
+        platoAgua:        crearGrafica('chart-plato-agua',         'Mililitros (ml)', COLOR_WATER, 'Agua dispensada', 0, 300),
         contenedorAgua:    crearGrafica('chart-contenedor-agua',   '% restante',  COLOR_WATER, 'Nivel contenedor',  10,  100),
     };
 
-    // ── Configuración de cada gráfica (min/max para simulación) ──
     const configGraficas = {
-        platoComida:      { min: 0,  max: 150, labelY: 'Gramos (g)',     labelYkg: null,        color: COLOR_FOOD  },
-        contenedorComida: { min: 20, max: 100, labelY: '% restante',     labelYkg: 'kg restante', color: COLOR_FOOD  },
+        platoComida:      { min: 0,  max: 150, labelY: 'Gramos (g)',    labelYkg: null,        color: COLOR_FOOD  },
+        contenedorComida: { min: 20, max: 100, labelY: '% restante',    labelYkg: 'kg restante', color: COLOR_FOOD  },
         platoAgua:        { min: 0,  max: 300, labelY: 'Mililitros (ml)', labelYkg: null,        color: COLOR_WATER },
-        contenedorAgua:   { min: 10, max: 100, labelY: '% restante',     labelYkg: null,        color: COLOR_WATER },
+        contenedorAgua:   { min: 10, max: 100, labelY: '% restante',    labelYkg: null,        color: COLOR_WATER },
     };
 
-    // ── Unidad activa por gráfica (para contenedores con toggle kg) ──
     const unidades = { contenedorComida: '%' };
 
-    // ── Actualizar gráfica con nueva vista ──
     const actualizarGrafica = (key, vista) => {
         const chart = graficas[key];
         const cfg   = configGraficas[key];
@@ -311,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let min = cfg.min, max = cfg.max, labelY = cfg.labelY;
 
-        // Si el contenedor de comida está en kg, ajustamos escala
         if (key === 'contenedorComida' && unidades.contenedorComida === 'kg') {
             labelY = 'kg restante';
             min = 0; max = 5;
@@ -325,7 +335,6 @@ document.addEventListener('DOMContentLoaded', () => {
         chart.update();
     };
 
-    // ── Vincular selectores de vista ──
     const selectores = document.querySelectorAll('.chart-view-selector');
     selectores.forEach(sel => {
         sel.addEventListener('change', (e) => {
@@ -335,7 +344,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // ── Toggle kg/% para contenedor de comida ──
     const btnToggleKg = document.getElementById('btn-toggle-kg');
     if (btnToggleKg) {
         btnToggleKg.addEventListener('click', () => {
@@ -343,14 +351,12 @@ document.addEventListener('DOMContentLoaded', () => {
             unidades.contenedorComida = esKg ? '%' : 'kg';
             btnToggleKg.textContent = esKg ? 'Ver en kg' : 'Ver en %';
 
-            // Obtener vista actual del selector correspondiente
             const sel   = document.querySelector('.chart-view-selector[data-chart="contenedorComida"]');
             const vista = sel ? sel.value : 'horas';
             actualizarGrafica('contenedorComida', vista);
         });
     }
 
-    // ── Tiempo real: añadir un punto nuevo cada 5 segundos ──
     const rangosMax = { horas: 24, dias: 24, meses: 30 };
 
     const tickTiempoReal = () => {
@@ -363,7 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const vista  = sel ? sel.value : 'horas';
             const maxPts = rangosMax[vista];
 
-            // Solo actualizar en tiempo real en vista de horas (tiene sentido en segundos)
             if (vista !== 'horas') return;
 
             const ahora   = new Date();
@@ -372,7 +377,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let min = cfg.min, max = cfg.max;
             if (key === 'contenedorComida' && unidades.contenedorComida === 'kg') { min = 0; max = 5; }
 
-            // Nuevo valor: suave variación del último valor
             const ultimo    = chart.data.datasets[0].data.slice(-1)[0] ?? (min + max) / 2;
             const variacion = (Math.random() - 0.5) * (max - min) * 0.08;
             const nuevo     = Math.min(max, Math.max(min, +(ultimo + variacion).toFixed(1)));
@@ -385,16 +389,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 chart.data.datasets[0].data.shift();
             }
 
-            chart.update('none'); // sin animación para que sea fluido
+            chart.update('none'); 
         });
     };
 
     setInterval(tickTiempoReal, 5000);
 
-
-    // ==========================================
-    // 7. HAMBURGUESA (MENÚ MÓVIL)
-    // ==========================================
     const btnHamburger = document.getElementById('btn-hamburger');
     const mainNav      = document.getElementById('main-nav');
 
@@ -403,7 +403,6 @@ document.addEventListener('DOMContentLoaded', () => {
             btnHamburger.classList.toggle('is-open');
             mainNav.classList.toggle('nav--open');
         });
-        // Cerrar al hacer clic en un enlace
         mainNav.querySelectorAll('a, button').forEach(el => {
             el.addEventListener('click', () => {
                 btnHamburger.classList.remove('is-open');
@@ -411,5 +410,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
 });
