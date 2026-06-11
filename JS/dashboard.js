@@ -23,18 +23,59 @@ document.addEventListener('DOMContentLoaded', () => {
     animarContador('nivel-agua', 92);
 
     // ==========================================
-    // 2. BOTONES DE ACCIÓN
+    // 2. BOTONES DE ACCIÓN (CONEXIÓN REAL NUBE)
     // ==========================================
-    const btnComida = document.querySelector('.btn-food');
+    const btnComida = document.querySelector('.btn-food') || document.querySelector("button:contains('Llenar Plato')");
     const btnAgua   = document.querySelector('.btn-water');
 
     if (btnComida) {
         btnComida.addEventListener('click', () => {
-            const t = btnComida.textContent;
-            btnComida.disabled = true; btnComida.textContent = 'Dispensando...'; btnComida.style.opacity = '0.7';
-            setTimeout(() => { btnComida.disabled = false; btnComida.textContent = t; btnComida.style.opacity = '1'; alert('Plato de comida lleno'); }, 2000);
+            const textoOriginal = btnComida.textContent;
+            
+            // 1. Efecto visual de carga instantáneo
+            btnComida.disabled = true; 
+            btnComida.textContent = 'Enviando orden... 🐾'; 
+            btnComida.style.opacity = '0.7';
+            
+            console.log("📤 Solicitando dispensación manual para WOOFITO_HARDWARE_UNOQ_01...");
+
+            // 2. Petición real al servidor en Railway usando tu constante URL_API
+            fetch(`${URL_API}/dispositivos/solicitar-comida`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    id_dispositivo: 'WOOFITO_HARDWARE_UNOQ_01' // ID exacto de tu Arduino
+                })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    btnComida.textContent = '¡Orden recibida! 🥣';
+                    alert('🎉 ¡Petición procesada! El dispensador girará en su próximo ciclo de consulta.');
+                } else {
+                    alert('⚠️ El servidor no pudo registrar la orden.');
+                }
+            })
+            .catch(err => {
+                console.error('❌ Fallo de conexión con Railway:', err);
+                alert('No se pudo establecer comunicación con el servidor de Woofitos.');
+            })
+            .finally(() => {
+                // Restaurar el botón después de la acción
+                setTimeout(() => {
+                    btnComida.disabled = false; 
+                    btnComida.textContent = textoOriginal; 
+                    btnComida.style.opacity = '1'; 
+                }, 2000);
+            });
         });
     }
+
     if (btnAgua) {
         btnAgua.addEventListener('click', () => {
             const t = btnAgua.textContent;
