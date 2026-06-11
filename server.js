@@ -49,35 +49,24 @@ db.connect((err) => {
 // ==========================================
 let port = null;
 let parser = null;
-const SERIAL_PORT = process.env.SERIAL_PORT || 'COM3';
 
-// ⚡ CORRECCIÓN: Solo intentamos conectar si NO estamos en producción
-if (process.env.NODE_ENV === 'production') {
-    console.log('🌍 Servidor en modo PRODUCCIÓN: Conexión Serial deshabilitada.');
-} else {
-    console.log('💻 Servidor en modo DESARROLLO: Intentando conectar a ' + SERIAL_PORT);
+// Solo cargamos la librería y conectamos si NO estamos en producción (Railway)
+if (process.env.NODE_ENV !== 'production') {
+    const { SerialPort } = require('serialport');
+    const { ReadlineParser } = require('@serialport/parser-readline');
+    const SERIAL_PORT = process.env.SERIAL_PORT || 'COM3';
+    
     try {
         port = new SerialPort({ path: SERIAL_PORT, baudRate: 9600, autoOpen: false });
         port.open((err) => {
-            if (err) {
-                console.log(`⚠️ Arduino no detectado en ${SERIAL_PORT}.`);
-            } else {
-                console.log(`🔌 Arduino conectado en ${SERIAL_PORT}`);
-                parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
-                parser.on('data', (data) => {
-                    const gramos = parseInt(data.trim());
-                    if (!isNaN(gramos)) {
-                        const query = 'INSERT INTO historial_dispensacion (cantidad_gramos, fecha) VALUES (?, NOW())';
-                        db.query(query, [gramos], (err) => {
-                            if (err) console.error('❌ Error al guardar dato del Arduino:', err.message);
-                        });
-                    }
-                });
-            }
+            if (err) console.log(`⚠️ Puerto ${SERIAL_PORT} no disponible.`);
+            else console.log(`🔌 Arduino conectado en ${SERIAL_PORT}`);
         });
-    } catch (error) {
-        console.log('⚠️ SerialPort no disponible. Continuando sin hardware...');
+    } catch (e) {
+        console.log("No se pudo cargar SerialPort (normal en producción)");
     }
+} else {
+    console.log('🌍 Servidor en modo PRODUCCIÓN: SerialPort deshabilitado.');
 }
 
 // ==========================================
