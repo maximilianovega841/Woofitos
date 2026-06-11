@@ -136,35 +136,27 @@ app.put('/api/usuarios/actualizar', (req, res) => {
     });
 });
 
-// ==========================================
-// 7. ENDPOINTS DE DISPOSITIVOS (WEB INTERFAZ)
-// ==========================================
-app.get('/api/dispositivos/:usuario_id', (req, res) => {
-    const { usuario_id } = req.params;
-    // Si por error pasan la palabra "verificar", Express podría confundirse, así que controlamos el flujo:
-    if(usuario_id === "verificar") return; 
+// --- RUTA ESPECÍFICA PARA EL ARDUINO (Pon esta ANTES de la otra) ---
+app.get('/api/dispositivos/verificar', (req, res) => {
+    const arduino_id = req.query.mac;
+    if (!arduino_id) return res.send("VINCULADO:NO");
 
-    const query = 'SELECT * FROM dispositivos WHERE id_usuario = ? ORDER BY fecha_vinculacion DESC';
-    db.query(query, [usuario_id], (err, results) => {
-        if (err) return res.status(500).json({ error: 'Error al obtener.' });
-        res.json({ dispositivos: results });
+    const query = 'SELECT vinculado FROM dispositivos WHERE id_dispositivo = ? LIMIT 1';
+    db.query(query, [arduino_id], (err, results) => {
+        if (err || results.length === 0) return res.send("VINCULADO:NO");
+        
+        // Si está vinculado, responde VINCULADO:OK
+        if (results[0].vinculado === 1) {
+            return res.send("VINCULADO:OK");
+        }
+        return res.send("VINCULADO:NO");
     });
 });
 
-app.post('/api/dispositivos/vincular', (req, res) => {
-    const { usuario_id, codigo, nombre_mascota } = req.body;
-    if (!usuario_id || !codigo) return res.status(400).json({ error: 'Faltan datos.' });
-
-    const buscar = 'SELECT * FROM dispositivos WHERE codigo_emparej = ? LIMIT 1';
-    db.query(buscar, [codigo.toUpperCase().trim()], (err, results) => {
-        if (err || results.length === 0) return res.status(404).json({ error: 'Código inválido.' });
-
-        const actualizar = 'UPDATE dispositivos SET id_usuario = ?, nombre_mascota = ?, vinculado = 1, fecha_vinculacion = NOW(), codigo_emparej = NULL WHERE id_dispositivo = ?';
-        db.query(actualizar, [usuario_id, nombre_mascota || 'Mi Woofito', results[0].id_dispositivo], (err2) => {
-            if (err2) return res.status(500).json({ error: 'Error al vincular.' });
-            res.json({ success: true });
-        });
-    });
+// --- RUTA PARA LA WEB (Dashboard) ---
+app.get('/api/dispositivos/:usuario_id', (req, res) => {
+    const { usuario_id } = req.params;
+    // ... tu código original aquí ...
 });
 
 // ==========================================
