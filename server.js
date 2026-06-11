@@ -15,15 +15,12 @@ const PORT = process.env.PORT || 3000;
 // ==========================================
 app.use(cors());
 app.use(express.json());
+// ⚡ AGREGA ESTA LÍNEA AQUÍ ⚡ (Permite que Express entienda el texto que manda el Arduino)
+app.use(express.urlencoded({ extended: true })); 
 
 // Sirve los archivos estáticos del proyecto (html, css, js, img)
 app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname, 'html')));
-
-// Ruta raíz → redirige al dashboard
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'html', 'index.html'));
-});
 
 // ==========================================
 // 2. CONEXIÓN A LA BASE DE DATOS
@@ -175,6 +172,70 @@ app.get('/api/dispositivos/:usuario_id', (req, res) => {
     db.query(query, [usuario_id], (err, results) => {
         if (err) return res.status(500).json({ error: 'Error al obtener dispositivos.' });
         res.json({ dispositivos: results });
+    });
+});
+
+// ==========================================
+// 8. CONEXIÓN DIRECTA CON EL ARDUINO UNO Q
+// ==========================================
+
+// POST — El Arduino se anuncia al prender por Puerto 80
+app.post('/api/dispositivos/registrar', (req, res) => {
+    // Arduino nos manda: mac="WOOFITO_HARDWARE_UNOQ_01" & ip="0.0.0.0"
+    const arduino_id = req.body.mac; 
+    
+    if (!arduino_id) {
+        return res.status(400).send("ERROR:FALTA_ID\n");
+    }
+
+    // Buscamos si el dispositivo ya existe en tu tabla MySQL
+    const buscarQuery = 'SELECT * FROM dispositivos WHERE id_dispositivo = ? LIMIT 1';
+    db.query(buscarQuery, [arduino_id], (err, results) => {
+        if (err) return res.status(500).send("ERROR:BD\n");
+
+        if (results.length > 0) {
+            const disp = results[0];
+            // Si el usuario ya metió el código en la web, le avisamos al Arduino
+            if (disp.vinculado === 1) {
+                return res.send("VINCULADO:OK\n");
+            } else {
+                // Si existe pero no se ha vinculado, le recordamos su código de emparejamiento
+                return res.send(`CODE:${disp.codigo_emparej}\n`);
+            }
+        } else {
+            // Si es la primera vez que se prende este Arduino, generamos el código de 6 dígitos
+            const nuevoCodigo = Math.floor(100000 + Math.random() * 900000).toString();
+            const expira = new Date(Date.now() + 15 * 60 * 1000); // Válido por 15 minutos
+
+            const insertarQuery = `
+                INSERT INTO dispositivos (id_dispositivo, codigo_emparej, codigo_expira, vinculado)
+                VALUES (?, ?, ?, 0)
+            `;
+            db.query(insertarQuery, [arduino_id, nuevoCodigo, expira], (insErr) => {
+                if (insErr) return res.status(500).send("ERROR:INSERT\n");
+                
+                // Respondemos en el texto plano que el Arduino sabe leer en su monitor serial
+                return res.send(`CODE:${nuevoCodigo}\n`);
+            });
+        }
+    });
+});
+
+// GET — El Arduino pregunta constantemente si ya metieron el código en la web
+app.get('/api/dispositivos/verificar', (req, res) => {
+    const arduino_id = req.query.mac;
+
+    if (!arduino_id) return res.send("VINCULADO:NO\n");
+
+    const query = 'SELECT vinculado FROM dispositivos WHERE id_dispositivo = ? LIMIT 1';
+    db.query(query, [arduino_id], (err, results) => {
+        if (err || results.length === 0) return res.send("VINCULADO:NO\n");
+
+        if (results[0].vinculado === 1) {
+            res.send("VINCULADO:OK\n");
+        } else {
+            res.send("VINCULADO:NO\n");
+        }
     });
 });
 
