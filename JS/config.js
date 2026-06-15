@@ -164,7 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="device-icon">🐾</div>
                     <div class="device-info">
                         <p class="device-name">${disp.nombre_mascota || 'Mi Woofito'}</p>
-                        <p class="device-id">${disp.id_dispositivo}</p>
                     </div>
                     <span class="device-badge ${esOnline ? 'badge--online' : 'badge--offline'}">
                         ${esOnline ? '● Online' : '● Offline'}
