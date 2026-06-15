@@ -158,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const card = document.createElement('div');
             card.className = 'device-card';
+            const esOnline = disp.online === 1 || disp.online === true;
             card.innerHTML = `
                 <div class="device-card-header">
                     <div class="device-icon">🐾</div>
@@ -165,6 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         <p class="device-name">${disp.nombre_mascota || 'Mi Woofito'}</p>
                         <p class="device-id">${disp.id_dispositivo}</p>
                     </div>
+                    <span class="device-badge ${esOnline ? 'badge--online' : 'badge--offline'}">
+                        ${esOnline ? '● Online' : '● Offline'}
+                    </span>
                 </div>
                 <p class="device-date">Vinculado el ${fecha}</p>
                 <div class="device-actions">
@@ -198,6 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     cargarDispositivos();
+
+    // Refrescar estado online/offline cada 30 segundos
+    setInterval(cargarDispositivos, 30000);
 
     // ==========================================
     // 5. MODAL AGREGAR DISPOSITIVO

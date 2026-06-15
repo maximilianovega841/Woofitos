@@ -272,6 +272,28 @@
     border: 1px solid #fed7d7;
 }
 
+/* ── Badge online/offline ── */
+.device-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.badge--online {
+    background-color: #f0fff4;
+    color: #276749;
+    border: 1px solid #9ae6b4;
+}
+
+.badge--offline {
+    background-color: #f7fafc;
+    color: #718096;
+    border: 1px solid #e2e8f0;
+}
+
 /* ── Nav item activo ── */
 .item--active {
     color: var(--color-food) !important;
