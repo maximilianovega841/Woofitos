@@ -4,8 +4,6 @@ const express    = require('express');
 const mysql      = require('mysql2');
 const cors       = require('cors');
 const path       = require('path');
-const { SerialPort }     = require('serialport');
-const { ReadlineParser } = require('@serialport/parser-readline');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -47,40 +45,6 @@ db.connect((err) => {
     }
     console.log('🐬 ¡Conexión exitosa a la base de datos MySQL!');
 });
-
-// ==========================================
-// 3. COMUNICACIÓN SERIAL CON ARDUINO (OPCIONAL)
-// ==========================================
-let port   = null;
-let parser = null;
-
-const SERIAL_PORT = process.env.SERIAL_PORT || 'COM3';
-
-try {
-    port = new SerialPort({ path: SERIAL_PORT, baudRate: 9600, autoOpen: false });
-
-    port.open((err) => {
-        if (err) {
-            console.log(`⚠️  Arduino no detectado en ${SERIAL_PORT}. Modo emulación activado.`);
-        } else {
-            console.log(`🔌 Arduino conectado en ${SERIAL_PORT}`);
-            parser = port.pipe(new ReadlineParser({ delimiter: '\r\n' }));
-            parser.on('data', (data) => {
-                const gramos = parseInt(data.trim());
-                if (!isNaN(gramos)) {
-                    console.log(`🐾 Arduino reporta: ${gramos}g`);
-                    const query = 'INSERT INTO historial_dispensacion (cantidad_gramos, fecha) VALUES (?, NOW())';
-                    db.query(query, [gramos], (err) => {
-                        if (err) console.error('❌ Error al guardar dato del Arduino:', err.message);
-                        else      console.log('💾 Dato guardado en MySQL.');
-                    });
-                }
-            });
-        }
-    });
-} catch (error) {
-    console.log('⚠️  SerialPort no disponible. Continuando sin hardware...');
-}
 
 // ==========================================
 // 4. ENDPOINT: LOGIN
