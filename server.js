@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express    = require('express');
-const mysql      = require('mysql2');
+const mysql      = require('mysql2'); // Sigue usando el mismo paquete
 const cors       = require('cors');
 const path       = require('path');
 
@@ -24,26 +24,33 @@ app.get('/', (req, res) => {
 });
 
 // ==========================================
-// 2. CONEXIÓN A LA BASE DE DATOS
-//    Lee las variables del .env (local) o
-//    de las variables de entorno de Railway
+// 2. POOL DE CONEXIONES A LA BASE DE DATOS (SOLUCIÓN AL ERROR 4031)
 // ==========================================
-const db = mysql.createConnection({
-    host:     process.env.DB_HOST,
-    port:     process.env.DB_PORT || 3306,
-    user:     process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+const db = mysql.createPool({
+    host:             process.env.DB_HOST,
+    port:             process.env.DB_PORT || 3306,
+    user:             process.env.DB_USER,
+    password:         process.env.DB_PASSWORD,
+    database:         process.env.DB_NAME,
     // Railway necesita SSL en producción
-    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
+    
+    // Configuraciones de optimización del Pool:
+    waitForConnections: true,
+    connectionLimit: 10,     // Ajusta según los límites de tu plan en Railway
+    maxIdle: 10,            // Máximo de conexiones inactivas retenidas
+    idleTimeout: 60000,     // Tiempo para cerrar conexiones inactivas (60 segundos)
+    queueLimit: 0
 });
 
-db.connect((err) => {
+// Verificar la salud del pool al arrancar el servidor
+db.getConnection((err, connection) => {
     if (err) {
-        console.error('\n❌ Error al conectar a la base de datos:', err.message);
+        console.error('\n❌ Error al inicializar el Pool de MySQL:', err.message);
         return;
     }
-    console.log('🐬 ¡Conexión exitosa a la base de datos MySQL!');
+    console.log('🐬 ¡Pool de conexiones listo y validado con MySQL!');
+    connection.release(); // Devuelve la conexión de prueba al pool inmediatamente
 });
 
 // ==========================================
@@ -129,7 +136,7 @@ app.listen(PORT, () => {
 });
 
 // ==========================================
-// 7. ENDPOINTS DE DISPOSITIVOS
+// 8. ENDPOINTS DE DISPOSITIVOS
 // ==========================================
 
 // GET — Listar dispositivos de un usuario
@@ -246,8 +253,7 @@ app.post('/api/dispositivos/vincular', (req, res) => {
 });
 
 // ==========================================
-// 8. ENDPOINT: VERIFICAR ESTADO DE VINCULACIÓN
-//    El ESP32 hace polling aquí cada 5 segundos
+// 9. ENDPOINT: VERIFICAR ESTADO DE VINCULACIÓN
 // ==========================================
 app.get('/api/dispositivos/estado/:arduino_id', (req, res) => {
     const { arduino_id } = req.params;
@@ -265,8 +271,7 @@ app.get('/api/dispositivos/estado/:arduino_id', (req, res) => {
 });
 
 // ==========================================
-// 9. ENDPOINT: REGISTRAR DISPENSACIÓN
-//    El ESP32 llama aquí cada vez que dispensa
+// 10. ENDPOINT: REGISTRAR DISPENSACIÓN
 // ==========================================
 app.post('/api/historial/registrar', (req, res) => {
     const { id_dispositivo, tipo_accion, detalle } = req.body;
@@ -281,10 +286,7 @@ app.post('/api/historial/registrar', (req, res) => {
 });
 
 // ==========================================
-// 10. ENDPOINT: HEARTBEAT
-//     El Arduino UNO Q llama aquí cada 30 seg
-//     para indicar que sigue encendido y conectado.
-//     El frontend usa esto para mostrar online/offline.
+// 11. ENDPOINT: HEARTBEAT
 // ==========================================
 app.post('/api/dispositivos/heartbeat', (req, res) => {
     const { arduino_id } = req.body;
@@ -300,14 +302,12 @@ app.post('/api/dispositivos/heartbeat', (req, res) => {
 });
 
 // ==========================================
-// 11. ENDPOINT: ACTUALIZAR SENSORES
-//     El Arduino manda nivel de comida y agua
+// 12. ENDPOINT: ACTUALIZAR SENSORES
 // ==========================================
 app.post('/api/sensores/actualizar', (req, res) => {
     const { id_dispositivo, nivel_comida, nivel_agua } = req.body;
     if (!id_dispositivo) return res.status(400).json({ error: 'Falta id_dispositivo.' });
 
-    // Upsert: actualizar si existe, insertar si no
     const query = `
         INSERT INTO monitoreo_tanques (id_dispositivo, nivel_comida, nivel_agua)
         VALUES (?, ?, ?)
